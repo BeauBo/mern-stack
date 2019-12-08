@@ -1,30 +1,21 @@
 import React from 'react'
 import { Container, ListGroup, ListGroupItem, Button } from 'reactstrap'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
-import uuid from 'uuid'
+import { useSelector, useDispatch } from 'react-redux'
 
-const ShoppingList = () => {
-  const [items, setItems] = React.useState([
-    { id: uuid.v4(), name: 'Egges'},
-    { id: uuid.v4(), name: 'Milk'},
-    { id: uuid.v4(), name: 'Steak'},
-    { id: uuid.v4(), name: 'Water'},
-  ])
+import { getItems, deleteItem } from '../actions/itemActions'
+
+const ShoppingList = (props) => {
+
+  const items = useSelector(state => state.item.items)
+  const dispatch = useDispatch()
+
+  React.useEffect(() => {
+    dispatch(getItems)
+  }, [dispatch])
 
   return (
     <Container>
-      <Button
-        color="dark"
-        style={{ marginBottom: '2rem'}}
-        onClick={() => {
-          const name = prompt('Enter Item')
-          if(name) {
-            setItems([...items, {id: uuid.v4(), name}])
-          }
-        }}
-      >
-        Add Item
-      </Button>
       <ListGroup>
         <TransitionGroup className="shopping-list">
           {items.map(({ id, name}) => (
@@ -34,9 +25,7 @@ const ShoppingList = () => {
                 className="remove-btn"
                 color="danger"
                 size="sm"
-                onClick={() => {
-                  setItems(items.filter(item => item.id !== id))
-                }}
+                onClick={() => dispatch(deleteItem(id))}
               >
               &times;
               </Button>
