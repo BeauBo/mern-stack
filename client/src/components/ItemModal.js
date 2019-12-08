@@ -10,7 +10,6 @@ import {
   Input
 } from 'reactstrap'
 import { useDispatch } from 'react-redux'
-import uuid from 'uuid'
 
 import { addItem } from '../actions/itemActions'
 
@@ -25,12 +24,7 @@ const ItemModal = () => {
   const onSubmit = (e) => {
     e.preventDefault()
 
-    const newItem = {
-      id: uuid.v4(),
-      name,
-    }
-
-    dispatch(addItem(newItem))
+    dispatch(addItem({ name }))
 
     toggle()
   }
